@@ -1,6 +1,10 @@
 {
   "extends": "assemblyscript/std/portable.json",
+  "compilerOptions": {
+    "types": [ "index.d.ts" ]
+  },
   "include": [
+    "./**/*.d.ts",
     "./**/*.ts"
   ]
 }

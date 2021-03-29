@@ -1,12 +1,8 @@
 import * as glMatrix from "./common";
-import { IndexedCollection, MathUtil } from "./imports";
+import { MathUtil } from "./imports";
 import * as mat4 from "./mat4";
 import * as quat from "./quat";
 import * as vec3 from "./vec3";
-
-export type quat2 = IndexedCollection;
-
-export type ReadonlyQuat2 = IndexedCollection;
 
 /**
  * Dual Quaternion<br>
@@ -22,8 +18,8 @@ export type ReadonlyQuat2 = IndexedCollection;
  * @returns {quat2} a new dual quaternion [real -> rotation, dual -> translation]
  */
 export function create(): quat2 {
-  let dq = changetype<IndexedCollection>(new Float64Array(8));
-  //if (glMatrix.ARRAY_TYPE != Float32Array) {
+  let dq = changetype<glMatrix.ARRAY_TYPE>(new Float64Array(8));
+  //if (glMatrix.ARRAY_TYPE != Float64Array) {
     dq[0] = 0;
     dq[1] = 0;
     dq[2] = 0;
@@ -44,7 +40,7 @@ export function create(): quat2 {
  * @function
  */
 export function clone(a: ReadonlyQuat2): quat2 {
-  let dq = changetype<IndexedCollection>(new Float64Array(8));
+  let dq = changetype<glMatrix.ARRAY_TYPE>(new Float64Array(8));
   dq[0] = a[0];
   dq[1] = a[1];
   dq[2] = a[2];
@@ -71,7 +67,7 @@ export function clone(a: ReadonlyQuat2): quat2 {
  * @function
  */
 export function fromValues(x1: f64, y1: f64, z1: f64, w1: f64, x2: f64, y2: f64, z2: f64, w2: f64): quat2 {
-  let dq = changetype<IndexedCollection>(new Float64Array(8));
+  let dq = changetype<glMatrix.ARRAY_TYPE>(new Float64Array(8));
   dq[0] = x1;
   dq[1] = y1;
   dq[2] = z1;
@@ -97,7 +93,7 @@ export function fromValues(x1: f64, y1: f64, z1: f64, w1: f64, x2: f64, y2: f64,
  * @function
  */
 export function fromRotationTranslationValues(x1: f64, y1: f64, z1: f64, w1: f64, x2: f64, y2: f64, z2: f64): quat2 {
-  let dq = changetype<IndexedCollection>(new Float64Array(8));
+  let dq = changetype<glMatrix.ARRAY_TYPE>(new Float64Array(8));
   dq[0] = x1;
   dq[1] = y1;
   dq[2] = z1;
@@ -121,7 +117,7 @@ export function fromRotationTranslationValues(x1: f64, y1: f64, z1: f64, w1: f64
  * @returns {quat2} dual quaternion receiving operation result
  * @function
  */
-export function fromRotationTranslation(out: quat2, q: quat.ReadonlyQuat, t: vec3.ReadonlyVec3): quat2 {
+export function fromRotationTranslation(out: quat2, q: ReadonlyQuat, t: ReadonlyVec3): quat2 {
   let ax = t[0] * 0.5,
     ay = t[1] * 0.5,
     az = t[2] * 0.5,
@@ -148,7 +144,7 @@ export function fromRotationTranslation(out: quat2, q: quat.ReadonlyQuat, t: vec
  * @returns {quat2} out quaternion receiving operation result
  * @function
  */
-export function fromTranslation(out: quat2, t: vec3.ReadonlyVec3): quat2 {
+export function fromTranslation(out: quat2, t: ReadonlyVec3): quat2 {
   out[0] = 0;
   out[1] = 0;
   out[2] = 0;
@@ -168,7 +164,7 @@ export function fromTranslation(out: quat2, t: vec3.ReadonlyVec3): quat2 {
  * @returns {quat2} out quaternion receiving operation result
  * @function
  */
-export function fromRotation(out: quat2, q: quat.ReadonlyQuat): quat2 {
+export function fromRotation(out: quat2, q: ReadonlyQuat): quat2 {
   out[0] = q[0];
   out[1] = q[1];
   out[2] = q[2];
@@ -188,7 +184,7 @@ export function fromRotation(out: quat2, q: quat.ReadonlyQuat): quat2 {
  * @returns {quat2} dual quat receiving operation result
  * @function
  */
-export function fromMat4(out: quat2, a: mat4.ReadonlyMat4): quat2 {
+export function fromMat4(out: quat2, a: ReadonlyMat4): quat2 {
   //TODO Optimize this
   let outer = quat.create();
   mat4.getRotation(outer, a);
@@ -278,7 +274,7 @@ export const getReal = quat.copy;
  * @param  {ReadonlyQuat2} a Dual Quaternion
  * @return {quat} dual part
  */
-export function getDual(out: quat.quat, a: ReadonlyQuat2): quat.quat {
+export function getDual(out: quat, a: ReadonlyQuat2): quat {
   out[0] = a[4];
   out[1] = a[5];
   out[2] = a[6];
@@ -304,7 +300,7 @@ export const setReal = quat.copy;
  * @returns {quat2} out
  * @function
  */
-export function setDual(out: quat2, q: quat.ReadonlyQuat): quat2 {
+export function setDual(out: quat2, q: ReadonlyQuat): quat2 {
   out[4] = q[0];
   out[5] = q[1];
   out[6] = q[2];
@@ -318,7 +314,7 @@ export function setDual(out: quat2, q: quat.ReadonlyQuat): quat2 {
  * @param  {ReadonlyQuat2} a Dual Quaternion to be decomposed
  * @return {vec3} translation
  */
-export function getTranslation(out: vec3.vec3, a: ReadonlyQuat2): vec3.vec3 {
+export function getTranslation(out: vec3, a: ReadonlyQuat2): vec3 {
   let ax = a[4],
     ay = a[5],
     az = a[6],
@@ -341,7 +337,7 @@ export function getTranslation(out: vec3.vec3, a: ReadonlyQuat2): vec3.vec3 {
  * @param {ReadonlyVec3} v vector to translate by
  * @returns {quat2} out
  */
-export function translate(out: quat2, a: ReadonlyQuat2, v: vec3.ReadonlyVec3): quat2 {
+export function translate(out: quat2, a: ReadonlyQuat2, v: ReadonlyVec3): quat2 {
   let ax1 = a[0],
     ay1 = a[1],
     az1 = a[2],
@@ -471,7 +467,7 @@ export function rotateZ(out: quat2, a: ReadonlyQuat2, rad: f64): quat2 {
  * @param {ReadonlyQuat} q quaternion to rotate by
  * @returns {quat2} out
  */
-export function rotateByQuatAppend(out: quat2, a: ReadonlyQuat2, q: quat.ReadonlyQuat): quat2 {
+export function rotateByQuatAppend(out: quat2, a: ReadonlyQuat2, q: ReadonlyQuat): quat2 {
   let qx = q[0],
     qy = q[1],
     qz = q[2],
@@ -504,7 +500,7 @@ export function rotateByQuatAppend(out: quat2, a: ReadonlyQuat2, q: quat.Readonl
  * @param {ReadonlyQuat2} a the dual quaternion to rotate
  * @returns {quat2} out
  */
-export function rotateByQuatPrepend(out: quat2, q: quat.ReadonlyQuat, a: ReadonlyQuat2): quat2 {
+export function rotateByQuatPrepend(out: quat2, q: ReadonlyQuat, a: ReadonlyQuat2): quat2 {
   let qx = q[0],
     qy = q[1],
     qz = q[2],
@@ -538,7 +534,7 @@ export function rotateByQuatPrepend(out: quat2, q: quat.ReadonlyQuat, a: Readonl
  * @param {Number} rad how far the rotation should be
  * @returns {quat2} out
  */
-export function rotateAroundAxis(out: quat2, a: ReadonlyQuat2, axis: vec3.ReadonlyVec3, rad: f64): quat2 {
+export function rotateAroundAxis(out: quat2, a: ReadonlyQuat2, axis: ReadonlyVec3, rad: f64): quat2 {
   //Special case for rad = 0
   if (Math.abs(rad) < glMatrix.EPSILON) {
     return copy(out, a);

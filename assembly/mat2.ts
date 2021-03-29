@@ -1,10 +1,6 @@
 import * as glMatrix from "./common";
-import { IndexedCollection, MathUtil } from "./imports";
-import { ReadonlyVec2 } from "./vec2";
+import { MathUtil } from "./imports";
 
-export type mat2 = IndexedCollection;
-
-export type ReadonlyMat2 = IndexedCollection;
 
 /**
  * 2x2 Matrix
@@ -17,8 +13,8 @@ export type ReadonlyMat2 = IndexedCollection;
  * @returns {mat2} a new 2x2 matrix
  */
 export function create(): mat2 {
-  let out: mat2 = changetype<IndexedCollection>(new Float64Array(4));
-  //if (glMatrix.ARRAY_TYPE != Float32Array) {
+  let out = changetype<glMatrix.ARRAY_TYPE>(new Float64Array(4));
+  //if (glMatrix.ARRAY_TYPE != Float64Array) {
     out[1] = 0;
     out[2] = 0;
   //}
@@ -34,7 +30,7 @@ export function create(): mat2 {
  * @returns {mat2} a new 2x2 matrix
  */
 export function clone(a: ReadonlyMat2): mat2 {
-  let out: mat2 = changetype<IndexedCollection>(new Float64Array(4));
+  let out: mat2 = changetype<glMatrix.ARRAY_TYPE>(new Float64Array(4));
   out[0] = a[0];
   out[1] = a[1];
   out[2] = a[2];
@@ -81,7 +77,7 @@ export function identity(out: mat2): mat2 {
  * @returns {mat2} out A new 2x2 matrix
  */
 export function fromValues(m00: f64, m01: f64, m10: f64, m11: f64): mat2 {
-  let out: mat2 = changetype<IndexedCollection>(new Float64Array(4));
+  let out: mat2 = changetype<glMatrix.ARRAY_TYPE>(new Float64Array(4));
   out[0] = m00;
   out[1] = m01;
   out[2] = m10;
@@ -325,7 +321,7 @@ export function frob(a: ReadonlyMat2): f64 {
  * @returns {Array<ReadonlyMat2>} LDU
  */
 
-export function LDU(L: ReadonlyMat2, D: ReadonlyMat2, U: ReadonlyMat2, a: ReadonlyMat2): Array<ReadonlyMat2> {
+export function LDU(L: mat2, D: mat2, U: mat2, a: mat2): Array<ReadonlyMat2> {
   L[2] = a[2] / a[0];
   U[0] = a[0];
   U[1] = a[1];

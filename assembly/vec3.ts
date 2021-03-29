@@ -1,12 +1,8 @@
 import * as glMatrix from "./common";
-import { IArguments, IndexedCollection, MathUtil } from "./imports";
-import { ReadonlyMat3 } from "./mat3";
-import { ReadonlyMat4 } from "./mat4";
-import { ReadonlyQuat } from "./quat";
+import { MathUtil } from "./imports";
 
-export type vec3 = IndexedCollection;
 
-export type ReadonlyVec3 = IndexedCollection;
+
 
 /**
  * 3 Dimensional Vector
@@ -19,8 +15,8 @@ export type ReadonlyVec3 = IndexedCollection;
  * @returns {vec3} a new 3D vector
  */
 export function create(): vec3 {
-  let out = changetype<IndexedCollection>(new Float64Array(3));
-  //if (glMatrix.ARRAY_TYPE != Float32Array) {
+  let out = changetype<glMatrix.ARRAY_TYPE>(new Float64Array(3));
+  //if (glMatrix.ARRAY_TYPE != Float64Array) {
     out[0] = 0;
     out[1] = 0;
     out[2] = 0;
@@ -35,7 +31,7 @@ export function create(): vec3 {
  * @returns {vec3} a new 3D vector
  */
 export function clone(a: ReadonlyVec3): vec3 {
-  var out = changetype<IndexedCollection>(new Float64Array(3));
+  var out = changetype<glMatrix.ARRAY_TYPE>(new Float64Array(3));
   out[0] = a[0];
   out[1] = a[1];
   out[2] = a[2];
@@ -64,7 +60,7 @@ export function length(a: ReadonlyVec3): f64 {
  * @returns {vec3} a new 3D vector
  */
 export function fromValues(x: f64, y: f64, z: f64): vec3 {
-  let out = changetype<IndexedCollection>(new Float64Array(3));
+  let out = changetype<glMatrix.ARRAY_TYPE>(new Float64Array(3));
   out[0] = x;
   out[1] = y;
   out[2] = z;

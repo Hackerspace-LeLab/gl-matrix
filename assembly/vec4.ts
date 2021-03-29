@@ -1,10 +1,6 @@
 import * as glMatrix from "./common";
-import { IArguments, IndexedCollection, MathUtil } from "./imports";
-import { ReadonlyQuat } from "./quat";
+import { MathUtil } from "./imports";
 
-export type vec4 = IndexedCollection;
-
-export type ReadonlyVec4 = IndexedCollection;
 
 /**
  * 4 Dimensional Vector
@@ -17,8 +13,8 @@ export type ReadonlyVec4 = IndexedCollection;
  * @returns {vec4} a new 4D vector
  */
 export function create(): vec4 {
-  let out = changetype<IndexedCollection>(new Float64Array(4));
-  //if (glMatrix.ARRAY_TYPE != Float32Array) {
+  let out = changetype<glMatrix.ARRAY_TYPE>(new Float64Array(4));
+  //if (glMatrix.ARRAY_TYPE != Float64Array) {
     out[0] = 0;
     out[1] = 0;
     out[2] = 0;
@@ -34,7 +30,7 @@ export function create(): vec4 {
  * @returns {vec4} a new 4D vector
  */
 export function clone(a: ReadonlyVec4): vec4 {
-  let out = changetype<IndexedCollection>(new Float64Array(4));
+  let out = changetype<glMatrix.ARRAY_TYPE>(new Float64Array(4));
   out[0] = a[0];
   out[1] = a[1];
   out[2] = a[2];
@@ -52,7 +48,7 @@ export function clone(a: ReadonlyVec4): vec4 {
  * @returns {vec4} a new 4D vector
  */
 export function fromValues(x: f64, y: f64, z: f64, w: f64): vec4 {
-  let out = changetype<IndexedCollection>(new Float64Array(4));
+  let out = changetype<glMatrix.ARRAY_TYPE>(new Float64Array(4));
   out[0] = x;
   out[1] = y;
   out[2] = z;

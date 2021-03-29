@@ -1,25 +1,5 @@
 import * as glMatrix from "./common";
-import { IndexedCollection, MathUtil } from "./imports";
-import * as quat from "./quat";
-import { ReadonlyQuat2 } from "./quat2";
-import * as vec3 from "./vec3";
-
-export type quat4 = IndexedCollection;
-
-export type mat4 = IndexedCollection;
-
-export type ReadonlyMat4 = IndexedCollection;
-
-/**
- * Object containing the following values: upDegrees, downDegrees, leftDegrees, rightDegrees
- */
-export class Fov {
-  upDegrees: f64;
-  downDegrees: f64;
-  leftDegrees: f64;
-  rightDegrees: f64;
-  [key: string]: f64;
-}
+import { MathUtil } from "./imports";
 
 /**
  * 4x4 Matrix<br>Format: column-major, when typed out it looks like row-major<br>The matrices are being post multiplied.
@@ -32,8 +12,8 @@ export class Fov {
  * @returns {mat4} a new 4x4 matrix
  */
 export function create(): mat4 {
-  let out = changetype<IndexedCollection>(new Float64Array(16));
-  //if (glMatrix.ARRAY_TYPE != Float32Array) {
+  let out = changetype<glMatrix.ARRAY_TYPE>(new Float64Array(16));
+  //if (glMatrix.ARRAY_TYPE != Float64Array) {
     out[1] = 0;
     out[2] = 0;
     out[3] = 0;
@@ -61,7 +41,7 @@ export function create(): mat4 {
  * @returns {mat4} a new 4x4 matrix
  */
 export function clone(a: ReadonlyMat4): mat4 {
-  let out = changetype<IndexedCollection>(new Float64Array(16));
+  let out = changetype<glMatrix.ARRAY_TYPE>(new Float64Array(16));
   out[0] = a[0];
   out[1] = a[1];
   out[2] = a[2];
@@ -147,7 +127,7 @@ export function fromValues(
   m32: f64,
   m33: f64
 ): mat4 {
-  let out = changetype<IndexedCollection>(new Float64Array(16));
+  let out = changetype<glMatrix.ARRAY_TYPE>(new Float64Array(16));
   out[0] = m00;
   out[1] = m01;
   out[2] = m02;
@@ -540,7 +520,7 @@ export function multiply(out: mat4, a: ReadonlyMat4, b: ReadonlyMat4): mat4 {
  * @param {ReadonlyVec3} v vector to translate by
  * @returns {mat4} out
  */
-export function translate(out: mat4, a: ReadonlyMat4, v: vec3.ReadonlyVec3): mat4 {
+export function translate(out: mat4, a: ReadonlyMat4, v: ReadonlyVec3): mat4 {
   let x = v[0],
     y = v[1],
     z = v[2];
@@ -597,7 +577,7 @@ export function translate(out: mat4, a: ReadonlyMat4, v: vec3.ReadonlyVec3): mat
  * @param {ReadonlyVec3} v the vec3 to scale the matrix by
  * @returns {mat4} out
  **/
-export function scale(out: mat4, a: ReadonlyMat4, v: vec3.ReadonlyVec3): mat4 {
+export function scale(out: mat4, a: ReadonlyMat4, v: ReadonlyVec3): mat4 {
   let x = v[0],
     y = v[1],
     z = v[2];
@@ -630,7 +610,7 @@ export function scale(out: mat4, a: ReadonlyMat4, v: vec3.ReadonlyVec3): mat4 {
  * @param {ReadonlyVec3} axis the axis to rotate around
  * @returns {mat4} out
  */
-export function rotate(out: mat4, a: ReadonlyMat4, rad: f64, axis: vec3.ReadonlyVec3): mat4 | null {
+export function rotate(out: mat4, a: ReadonlyMat4, rad: f64, axis: ReadonlyVec3): mat4 | null {
   let x = axis[0],
     y = axis[1],
     z = axis[2];
@@ -847,7 +827,7 @@ export function rotateZ(out: mat4, a: ReadonlyMat4, rad: f64): mat4 {
  * @param {ReadonlyVec3} v Translation vector
  * @returns {mat4} out
  */
-export function fromTranslation(out: mat4, v: vec3.ReadonlyVec3): mat4 {
+export function fromTranslation(out: mat4, v: ReadonlyVec3): mat4 {
   out[0] = 1;
   out[1] = 0;
   out[2] = 0;
@@ -878,7 +858,7 @@ export function fromTranslation(out: mat4, v: vec3.ReadonlyVec3): mat4 {
  * @param {ReadonlyVec3} v Scaling vector
  * @returns {mat4} out
  */
-export function fromScaling(out: mat4, v: vec3.ReadonlyVec3): mat4 {
+export function fromScaling(out: mat4, v: ReadonlyVec3): mat4 {
   out[0] = v[0];
   out[1] = 0;
   out[2] = 0;
@@ -903,14 +883,14 @@ export function fromScaling(out: mat4, v: vec3.ReadonlyVec3): mat4 {
  * This is equivalent to (but much faster than):
  *
  *     mat4.identity(dest);
- *     mat4.rotate(dest, dest, rad: f64, axis: vec3.ReadonlyVec3);
+ *     mat4.rotate(dest, dest, rad: f64, axis: ReadonlyVec3);
  *
  * @param {mat4} out mat4 receiving operation result
  * @param {Number} rad the angle to rotate the matrix by
  * @param {ReadonlyVec3} axis the axis to rotate around
  * @returns {mat4} out
  */
-export function fromRotation(out: mat4, rad: f64, axis: vec3.ReadonlyVec3): mat4 | null {
+export function fromRotation(out: mat4, rad: f64, axis: ReadonlyVec3): mat4 | null {
   let x = axis[0],
     y = axis[1],
     z = axis[2];
@@ -1066,11 +1046,11 @@ export function fromZRotation(out: mat4, rad: f64): mat4 {
  *     mat4.multiply(dest, quatMat);
  *
  * @param {mat4} out mat4 receiving operation result
- * @param {quat4} q Rotation quaternion
+ * @param {ReadonlyQuat2} q Rotation quaternion
  * @param {ReadonlyVec3} v Translation vector
  * @returns {mat4} out
  */
-export function fromRotationTranslation(out: mat4, q: quat4, v: vec3.ReadonlyVec3): mat4 {
+export function fromRotationTranslation(out: mat4, q: ReadonlyQuat2, v: ReadonlyVec3): mat4 {
   // Quaternion math
   let x = q[0],
     y = q[1],
@@ -1152,7 +1132,7 @@ export function fromQuat2(out: mat4, a: ReadonlyQuat2): mat4 {
  * @param  {ReadonlyMat4} mat Matrix to be decomposed (input)
  * @return {vec3} out
  */
-export function getTranslation(out: vec3.vec3, mat: ReadonlyMat4): vec3.vec3 {
+export function getTranslation(out: vec3, mat: ReadonlyMat4): vec3 {
   out[0] = mat[12];
   out[1] = mat[13];
   out[2] = mat[14];
@@ -1198,7 +1178,7 @@ export function getScaling(out: mat4, mat: ReadonlyMat4): mat4 {
  * @return {quat} out
  */
 export function getRotation(out: mat4, mat: ReadonlyMat4): mat4 {
-  let scaling = changetype<IndexedCollection>(new Float64Array(3));
+  let scaling = changetype<glMatrix.ARRAY_TYPE>(new Float64Array(3));
   getScaling(scaling, mat);
 
   let is1 = 1 / scaling[0];
@@ -1256,7 +1236,7 @@ export function getRotation(out: mat4, mat: ReadonlyMat4): mat4 {
  * @param  {ReadonlyMat4} mat Matrix to be decomposed (input)
  * @returns {quat} out_r
  */
-export function decompose(out_r: quat.quat, out_t: vec3.vec3, out_s: vec3.vec3, mat: ReadonlyMat4): quat.quat {
+export function decompose(out_r: quat, out_t: vec3, out_s: vec3, mat: ReadonlyMat4): quat {
   out_t[0] = mat[12];
   out_t[1] = mat[13];
   out_t[2] = mat[14];
@@ -1338,7 +1318,7 @@ export function decompose(out_r: quat.quat, out_t: vec3.vec3, out_s: vec3.vec3, 
  * @param {ReadonlyVec3} s Scaling vector
  * @returns {mat4} out
  */
-export function fromRotationTranslationScale(out: mat4, q: quat4, v: vec3.ReadonlyVec3, s: vec3.ReadonlyVec3): mat4 {
+export function fromRotationTranslationScale(out: mat4, q: quat, v: ReadonlyVec3, s: ReadonlyVec3): mat4 {
   // Quaternion math
   let x = q[0],
     y = q[1],
@@ -1401,7 +1381,7 @@ export function fromRotationTranslationScale(out: mat4, q: quat4, v: vec3.Readon
  * @param {ReadonlyVec3} o The origin vector around which to scale and rotate
  * @returns {mat4} out
  */
-export function fromRotationTranslationScaleOrigin(out: mat4, q: quat4, v: vec3.ReadonlyVec3, s: vec3.ReadonlyVec3, o: vec3.ReadonlyVec3): mat4 {
+export function fromRotationTranslationScaleOrigin(out: mat4, q: quat, v: ReadonlyVec3, s: ReadonlyVec3, o: ReadonlyVec3): mat4 {
   // Quaternion math
   let x = q[0],
     y = q[1],
@@ -1467,7 +1447,7 @@ export function fromRotationTranslationScaleOrigin(out: mat4, q: quat4, v: vec3.
  *
  * @returns {mat4} out
  */
-export function fromQuat(out: mat4, q: quat.ReadonlyQuat): mat4 {
+export function fromQuat(out: mat4, q: ReadonlyQuat): mat4 {
   let x = q[0],
     y = q[1],
     z = q[2],
@@ -1762,7 +1742,7 @@ export function orthoZO(out: mat4, left: f64, right: f64, bottom: f64, top: f64,
  * @param {ReadonlyVec3} up vec3 pointing up
  * @returns {mat4} out
  */
-export function lookAt(out: mat4, eye: vec3.ReadonlyVec3, center: vec3.ReadonlyVec3, up: vec3.ReadonlyVec3): mat4 {
+export function lookAt(out: mat4, eye: ReadonlyVec3, center: ReadonlyVec3, up: ReadonlyVec3): mat4 {
   let x0: f64, x1: f64, x2: f64, y0: f64, y1: f64, y2: f64, z0: f64, z1: f64, z2: f64, len: f64;
   let eyex = eye[0];
   let eyey = eye[1];
@@ -1851,7 +1831,7 @@ export function lookAt(out: mat4, eye: vec3.ReadonlyVec3, center: vec3.ReadonlyV
  * @param {ReadonlyVec3} up vec3 pointing up
  * @returns {mat4} out
  */
-export function targetTo(out: mat4, eye: vec3.ReadonlyVec3, target: vec3.ReadonlyVec3, up: vec3.ReadonlyVec3): mat4 {
+export function targetTo(out: mat4, eye: ReadonlyVec3, target: ReadonlyVec3, up: ReadonlyVec3): mat4 {
   let eyex = eye[0],
     eyey = eye[1],
     eyez = eye[2],

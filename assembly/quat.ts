@@ -1,12 +1,7 @@
 import * as glMatrix from "./common";
-import { IndexedCollection } from "./imports";
 import * as mat3 from "./mat3";
 import * as vec3 from "./vec3";
 import * as vec4 from "./vec4";
-
-export type quat = IndexedCollection;
-
-export type ReadonlyQuat = IndexedCollection;
 
 /**
  * Quaternion in the format XYZW
@@ -19,8 +14,8 @@ export type ReadonlyQuat = IndexedCollection;
  * @returns {quat} a new quaternion
  */
 export function create(): quat {
-  let out = changetype<IndexedCollection>(new Float64Array(4));
-  //if (glMatrix.ARRAY_TYPE != Float32Array) {
+  let out = changetype<glMatrix.ARRAY_TYPE>(new Float64Array(4));
+  //if (glMatrix.ARRAY_TYPE != Float64Array) {
     out[0] = 0;
     out[1] = 0;
     out[2] = 0;
@@ -52,7 +47,7 @@ export function identity(out: quat): quat {
  * @param {Number} rad the angle in radians
  * @returns {quat} out
  **/
-export function setAxisAngle(out: quat, axis: vec3.ReadonlyVec3, rad: f64): quat {
+export function setAxisAngle(out: quat, axis: ReadonlyVec3, rad: f64): quat {
   rad = rad * 0.5;
   let s = Math.sin(rad);
   out[0] = s * axis[0];
@@ -75,7 +70,7 @@ export function setAxisAngle(out: quat, axis: vec3.ReadonlyVec3, rad: f64): quat
  * @param  {ReadonlyQuat} q     Quaternion to be decomposed
  * @return {Number}     Angle, in radians, of the rotation
  */
-export function getAxisAngle(out_axis: vec3.vec3, q: ReadonlyQuat): f64 {
+export function getAxisAngle(out_axis: vec3, q: ReadonlyQuat): f64 {
   let rad = Math.acos(q[3]) * 2.0;
   let s = Math.sin(rad / 2.0);
   if (s > glMatrix.EPSILON) {
@@ -418,7 +413,7 @@ export function conjugate(out: quat, a: ReadonlyQuat): quat {
  * @returns {quat} out
  * @function
  */
-export function fromMat3(out: quat, m: mat3.ReadonlyMat3): quat {
+export function fromMat3(out: quat, m: ReadonlyMat3): quat {
   // Algorithm in Ken Shoemake's article in 1987 SIGGRAPH course notes
   // article "Quaternion Calculus and Fast Animation".
   let fTrace = m[0] + m[4] + m[8];
@@ -756,9 +751,9 @@ export const sqlerp = ((): (out: quat, a: ReadonlyQuat, b: ReadonlyQuat, c: Read
  * @returns {quat} out
  */
   let matr = mat3.create();
-export const setAxes = ((): (out: quat, view: vec3.ReadonlyVec3, right: vec3.ReadonlyVec3, up: vec3.ReadonlyVec3) => quat => {
+export const setAxes = ((): (out: quat, view: ReadonlyVec3, right: ReadonlyVec3, up: ReadonlyVec3) => quat => {
 
-  return function (out: quat, view: vec3.ReadonlyVec3, right: vec3.ReadonlyVec3, up: vec3.ReadonlyVec3) {
+  return function (out: quat, view: ReadonlyVec3, right: ReadonlyVec3, up: ReadonlyVec3) {
     matr[0] = right[0];
     matr[3] = right[1];
     matr[6] = right[2];

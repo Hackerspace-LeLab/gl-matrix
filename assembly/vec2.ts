@@ -1,13 +1,5 @@
 import * as glMatrix from "./common";
-import { IArguments, IndexedCollection, MathUtil } from "./imports";
-import { ReadonlyMat2 } from "./mat2";
-import { ReadonlyMat2d } from "./mat2d";
-import { ReadonlyMat3 } from "./mat3";
-import { ReadonlyMat4 } from "./mat4";
-
-export type vec2 = IndexedCollection;
-
-export type ReadonlyVec2 = IndexedCollection;
+import { MathUtil } from "./imports";
 
 /**
  * 2 Dimensional Vector
@@ -20,8 +12,8 @@ export type ReadonlyVec2 = IndexedCollection;
  * @returns {vec2} a new 2D vector
  */
 export function create(): vec2 {
-  let out = changetype<IndexedCollection>(new Float64Array(2));
-  //if (glMatrix.ARRAY_TYPE != Float32Array) {
+  let out = changetype<glMatrix.ARRAY_TYPE>(new Float64Array(2));
+  //if (glMatrix.ARRAY_TYPE != Float64Array) {
     out[0] = 0;
     out[1] = 0;
   //}
@@ -35,7 +27,7 @@ export function create(): vec2 {
  * @returns {vec2} a new 2D vector
  */
 export function clone(a: ReadonlyVec2): vec2 {
-  let out = changetype<IndexedCollection>(new Float64Array(2));
+  let out = changetype<glMatrix.ARRAY_TYPE>(new Float64Array(2));
   out[0] = a[0];
   out[1] = a[1];
   return out;
@@ -49,7 +41,7 @@ export function clone(a: ReadonlyVec2): vec2 {
  * @returns {vec2} a new 2D vector
  */
 export function fromValues(x: f64, y: f64): vec2 {
-  let out = changetype<IndexedCollection>(new Float64Array(2));
+  let out = changetype<glMatrix.ARRAY_TYPE>(new Float64Array(2));
   out[0] = x;
   out[1] = y;
   return out;

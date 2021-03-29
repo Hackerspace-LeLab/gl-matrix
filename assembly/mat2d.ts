@@ -1,10 +1,6 @@
 import * as glMatrix from "./common";
-import { IndexedCollection, MathUtil } from "./imports";
-import { ReadonlyVec2 } from "./vec2";
+import { MathUtil } from "./imports";
 
-export type mat2d = IndexedCollection;
-
-export type ReadonlyMat2d = IndexedCollection;
 
 /**
  * 2x3 Matrix
@@ -31,7 +27,7 @@ export type ReadonlyMat2d = IndexedCollection;
  * @returns {mat2d} a new 2x3 matrix
  */
 export function create(): mat2d {
-  let out: mat2d = changetype<IndexedCollection>(new Float64Array(6));
+  let out = changetype<glMatrix.ARRAY_TYPE>(new Float64Array(6));
   //if (mat2d != Float32Array) {
     out[1] = 0;
     out[2] = 0;
@@ -50,7 +46,7 @@ export function create(): mat2d {
  * @returns {mat2d} a new 2x3 matrix
  */
 export function clone(a: ReadonlyMat2d): mat2d {
-  let out: mat2d = changetype<IndexedCollection>(new Float64Array(6));
+  let out = changetype<glMatrix.ARRAY_TYPE>(new Float64Array(6));
   out[0] = a[0];
   out[1] = a[1];
   out[2] = a[2];
@@ -105,7 +101,7 @@ export function identity(out: mat2d): mat2d {
  * @returns {mat2d} A new mat2d
  */
 export function fromValues(a: f64, b: f64, c: f64, d: f64, tx: f64, ty: f64): mat2d {
-  let out: mat2d = changetype<IndexedCollection>(new Float64Array(6));
+  let out = changetype<glMatrix.ARRAY_TYPE>(new Float64Array(6));
   out[0] = a;
   out[1] = b;
   out[2] = c;
